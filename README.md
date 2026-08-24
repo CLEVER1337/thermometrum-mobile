@@ -3,26 +3,12 @@
 Expo / React Native client for [thermometrum-backend](../thermometrum-backend). One screen: the
 current temperature and humidity, a 24 hour chart, pull-to-refresh, and a refresh every 30 seconds.
 
-## Scaffolding
-
-The screen, the chart and the API client live in `src/` and are already written. The Expo project
-files are not — they have to come from the generator so their versions match the SDK you get:
-
-```bash
-npx create-expo-app@latest . --template blank-typescript
-npx expo install react-native-svg
-```
-
-Then point the generated entry point at this app:
-
-```tsx
-// App.tsx
-export { default } from './src/App';
-```
+Expo SDK 57. `App.tsx` is a one-line re-export of `src/App.tsx`, which is where the screen lives.
 
 ## Running it
 
 ```bash
+npm install
 cp .env.example .env      # EXPO_PUBLIC_API_URL must be the backend's LAN address, not localhost
 npx expo start
 ```
