@@ -18,10 +18,15 @@ export type HistoryPoint = {
   humidity: number;
 };
 
-const baseUrl = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:5056').replace(/\/$/, '');
+const configuredUrl = process.env.EXPO_PUBLIC_API_URL;
+const baseUrl = (configuredUrl ?? 'http://localhost:5056').replace(/\/$/, '');
 const requestTimeout = 8000;
 
 async function getJson<T>(path: string): Promise<T> {
+  if (configuredUrl === undefined) {
+    throw new Error('EXPO_PUBLIC_API_URL is not set — copy .env.example to .env and restart with expo start --clear');
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), requestTimeout);
 
@@ -36,6 +41,9 @@ async function getJson<T>(path: string): Promise<T> {
     }
 
     return (await response.json()) as T;
+  } catch (caught) {
+    const reason = caught instanceof Error ? caught.message : String(caught);
+    throw new Error(`${baseUrl} — ${reason}`);
   } finally {
     clearTimeout(timeout);
   }
